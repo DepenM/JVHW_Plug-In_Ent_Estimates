@@ -17,6 +17,7 @@ def Prim_MST(weights):
 
     while MST_vertices < vertices:
         index = np.argmin(init_weights)
+        #setting inf value to any index selected so that it is not selected again
         init_weights[index] = np.inf
         adj_matrix[conn_vertex[index], index] = 1
         adj_matrix[index, conn_vertex[index]] = 1
@@ -66,6 +67,7 @@ def get_MLE_JVHW_est(vals, colnames):
         for j in range(vals.shape[0]):
             vals2[j, i] = dict[vals[j, i]]
 
+    #Get values in a suitable format for using MLE and JVHW estimators
     pairwise_MI_MLE = np.zeros((no_vars, no_vars))
     pairwise_MI_JVHW = np.zeros((no_vars, no_vars))
     for i in range(vals.shape[1]):
@@ -75,6 +77,7 @@ def get_MLE_JVHW_est(vals, colnames):
             pairwise_MI_JVHW[j, i] = est_MI_JVHW(vals2[:, i], vals2[:, j])
             pairwise_MI_JVHW[i, j] = pairwise_MI_JVHW[j, i]
 
+    #self-written code for MLE estimate for verifying the value obtained by est_MI_MLE estimate
     """
     ind_prob = np.zeros((no_vars, np.amax(lens)))
     pairwise_prob = np.zeros((no_vars, no_vars, np.amax(lens), np.amax(lens)))
@@ -94,9 +97,10 @@ def get_MLE_JVHW_est(vals, colnames):
                     if pairwise_prob[k1, k, i, j] != 0:
                         MI += pairwise_prob[k1, k, i, j] * np.log2(pairwise_prob[k1, k, i, j]/(ind_prob[k1, i]*ind_prob[k, j]))
             pairwise_MI[k1, k] = MI
+    
+    print(pairwise_MI - pairwise_MI2)
     """
-
-    #print(pairwise_MI - pairwise_MI2)
+    #using negative of MI because we need to maximise MI
     plot_tree(Prim_MST(-pairwise_MI_MLE), colnames)
     plot_tree(Prim_MST(-pairwise_MI_JVHW), colnames)
 
