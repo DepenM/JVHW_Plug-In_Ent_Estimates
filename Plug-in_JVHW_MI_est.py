@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from est_MI import est_MI_JVHW, est_MI_MLE
 
 def Prim_MST(weights):
+    np.random.seed(3578)
     vertices = weights.shape[0]
     adj_matrix = np.zeros((vertices, vertices))
     init_weights = np.zeros((vertices)) + np.inf
@@ -101,6 +102,7 @@ def get_MLE_JVHW_est(vals, colnames):
     print(pairwise_MI - pairwise_MI2)
     """
     #using negative of MI because we need to maximise MI
+    print(pairwise_MI_MLE - pairwise_MI_JVHW)
     plot_tree(Prim_MST(-pairwise_MI_MLE), colnames)
     plot_tree(Prim_MST(-pairwise_MI_JVHW), colnames)
 
