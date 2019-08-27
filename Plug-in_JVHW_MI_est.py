@@ -46,10 +46,12 @@ def plot_tree(adj_matrix, names):
     nx.draw_networkx(G, with_labels=True, labels=dict)
     plt.show()
 
-def load_data(path):
+def load_data(path, fraction):
     input = pd.read_csv(path)
     colnames = list(input.columns)
     vals = input.values
+    rows_to_load = int(vals.shape[0]*fraction)
+    vals = vals[np.random.choice(vals.shape[0], rows_to_load, replace=False), :]
     return colnames, vals
 
 def get_MLE_JVHW_est(vals, colnames):
@@ -107,5 +109,6 @@ def get_MLE_JVHW_est(vals, colnames):
     plot_tree(Prim_MST(-pairwise_MI_JVHW), colnames)
 
 if __name__ == '__main__':
-    colnames, vals = load_data('alarm10K.csv')
+    np.random.seed(7695)
+    colnames, vals = load_data('alarm10K.csv', 1)
     get_MLE_JVHW_est(vals, colnames)
